@@ -1,0 +1,92 @@
+% !TEX program = xelatex
+% ポラチェック・ヒンチンの公式に関する卒業研究 Introduction
+% コンパイル: xelatex pollaczek_khinchin_introduction.tex （参考文献の参照を確定するには2回）
+\documentclass[a4paper,11pt]{article}
+\usepackage[top=25mm,bottom=25mm,left=27mm,right=27mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+\setmainfont[BoldFont=lmroman10-bold.otf,ItalicFont=lmroman10-italic.otf,BoldItalicFont=lmroman10-bolditalic.otf]{lmroman10-regular.otf}
+\setCJKmainfont[BoldFont=HaranoAjiGothic-Bold.otf]{HaranoAjiMincho-Regular.otf}
+\linespread{1.13}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0.22em}
+\setcounter{secnumdepth}{2}
+\renewcommand{\refname}{参考文献}
+
+\begin{document}
+\begin{center}
+  {\large\bfseries 通信ネットワークにおける待ち時間の数学的解析}\par
+  \vspace{1mm}
+  {\normalsize --- $M/G/1$ 待ち行列とポラチェック・ヒンチンの公式 ---}
+\end{center}
+\vspace{3mm}
+
+\section{はじめに}
+
+\subsection{研究の背景}
+近年の通信ネットワークは，動画配信やオンライン会議など，多様なサービスの基盤となっている．
+これらのサービスの品質を考えるうえでは，伝送速度や通信の可用性に加え，データが宛先に届くまでの遅延も重要な指標である．
+通信経路上の遅延には，機器での処理時間，パケットが送信を待つ時間，パケットそのものの送信時間，信号の伝搬時間などが含まれる.
+特に，複数のパケットが同じ通信設備を利用するときには，先に到着したパケットの処理が終わるまで，後続のパケットが待たされる場合がある．
+このような\textbf{待ち行列による遅延}は，ネットワークの負荷に応じて変化するため，通信品質を理解するための基本的な研究対象となる．
+
+待ち行列を数学的に扱う際には，パケットの到着時刻と，個々のパケットに必要な処理時間を確率的に表現する．
+たとえば，一定の伝送速度をもつ通信リンクでは，パケットの長さが異なれば送信に要する時間も異なる．
+したがって，単位時間当たりの平均到着数と平均処理時間だけでなく，処理時間の\textbf{ばらつき}も待ち時間に影響する可能性がある．
+この関係を明らかにするには，確率過程と確率分布の性質を用いた解析が必要となる．
+待ち行列理論は，こうした複雑な現象を単純化したモデルの下で記述し，遅延の生じる仕組みを調べるための枠組みである.
+
+\subsection{$M/G/1$ 待ち行列モデル}
+本研究では，一つの設備がパケットを順に処理する状況を表す\textbf{$M/G/1$ 待ち行列}を考える．
+この記号の $M$ はパケットの到着がポアソン過程に従うこと，$G$ は処理時間が一般の確率分布に従うこと，$1$ は処理設備が一つであることを表す．
+到着率を $\lambda>0$ とし，パケットの処理時間を表す非負の確率変数を $S$ とする．
+各パケットの処理時間は独立同分布であり，到着過程とも独立であると仮定する．
+さらに，パケットは到着順に処理され，待機可能な数に上限はないものとする．
+
+このとき，設備の利用率に対応する量を
+\begin{equation}
+  \rho=\lambda\mathbb{E}[S]
+  \label{eq:rho}
+\end{equation}
+と定める．
+$\rho$ は，平均的にどの程度の処理能力が使用されるかを表す．
+以下では，$0<\mathbb{E}[S]<\infty$，$\mathbb{E}[S^2]<\infty$，および $\rho<1$ を仮定し，定常状態における待ち時間を考察する．
+特に $\rho<1$ は，平均的な到着負荷が設備の処理能力を下回るという安定性の条件である．
+
+\clearpage
+\subsection{ポラチェック・ヒンチンの公式と研究目的}
+$W_q$ を，パケットが到着してから自身の処理が始まるまでの\textbf{待ち時間}とする．
+ここで $W_q$ には，そのパケット自身の処理時間 $S$ は含まれない．
+前節の仮定の下で，定常状態の平均待ち時間は，\textbf{ポラチェック・ヒンチンの公式}によって
+\begin{equation}
+  \boxed{
+    \mathbb{E}[W_q]
+      =\frac{\lambda\mathbb{E}[S^2]}{2(1-\rho)}
+  }
+  \label{eq:pk}
+\end{equation}
+と表される.
+この公式は，$M/G/1$ 待ち行列における平均待ち時間が，到着率 $\lambda$，利用率 $\rho$，および処理時間の\textbf{第2モーメント} $\mathbb{E}[S^2]$ によって決定されることを示している．
+
+確率変数 $S$ の分散を $\mathrm{Var}(S)$ とすれば，
+\begin{equation}
+  \mathbb{E}[S^2]
+    =\mathrm{Var}(S)+\bigl(\mathbb{E}[S]\bigr)^2
+  \label{eq:secondmoment}
+\end{equation}
+である．
+したがって，到着率と平均処理時間が同じ二つのシステムを比べたとき，処理時間の分散が大きい方が平均待ち時間も大きくなる．
+これは，平均的な負荷が等しくても，一部のパケットに長い処理時間が必要となれば，後続のパケットの待ち時間が増えうることを意味する．
+また，$\rho$ が $1$ に近づくほど式\eqref{eq:pk}の分母は小さくなり，平均待ち時間は急速に増加する．
+このように，式\eqref{eq:pk}は，\textbf{負荷の大きさ}と\textbf{処理時間のばらつき}が待ち時間に与える影響を，定量的に捉えることを可能にする．
+
+本研究の目的は，$M/G/1$ 待ち行列モデルの仮定を明確にしたうえで，ポラチェック・ヒンチンの公式\eqref{eq:pk}を数学的に証明し，その意味を考察することである．
+証明では，到着時点で処理中のパケットに残された時間（残余処理時間）に着目し，待ち時間の期待値を求める考え方を用いる．
+さらに，平均処理時間は等しいが処理時間の分布が異なる場合を比較し，分散が平均待ち時間に及ぼす影響を確認する．
+これにより，確率論で学ぶ期待値や分散が，通信ネットワークの性能評価にどのように結び付くかを示したい．
+
+もっとも，実際の通信ネットワークでは，パケットの到着が必ずしもポアソン過程に従うとは限らず，複数の設備，優先制御，有限のバッファ容量なども考慮する必要がある．
+そのため，本研究で扱うモデルだけで実際の通信遅延を正確に予測できるとは限らない．
+それでも，仮定を明示した単純なモデルを解析することは，遅延を支配する要因を理解し，より複雑な通信システムを考えるための基礎になると考えられる．
